@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>New Year Journey 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Be Vietnam Pro', sans-serif;
+}
+
+body{
+  overflow:hidden;
+  background:linear-gradient(to top,#1a1a2e,#16213e);
+  color:white;
+}
+
+section{
+  width:100vw;
+  height:100vh;
+  display:none;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  text-align:center;
+  padding:20px;
+}
+
+.active{
+  display:flex;
+}
+
+button{
+  margin-top:20px;
+  padding:10px 20px;
+  border:none;
+  background:#f4a261;
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
+  border-radius:8px;
+  transition:0.3s;
+}
+button:hover{
+  background:#e76f51;
+}
+
+canvas{
+  position:absolute;
+  top:0;
+  left:0;
+  z-index:-1;
+}
+
+/* Hoa rơi */
+.flower{
+  position:absolute;
+  top:-20px;
+  font-size:20px;
+  animation:fall linear infinite;
+}
+@keyframes fall{
+  to{
+    transform:translateY(100vh) rotate(360deg);
+  }
+}
+
+/* Ngựa chạy */
+.horse{
+  position:absolute;
+  bottom:100px;
+  left:-200px;
+  font-size:80px;
+  animation:run 8s linear infinite;
+}
+@keyframes run{
+  from{ left:-200px; }
+  to{ left:100%; }
+}
+
+/* Lì xì */
+.lixi{
+  font-size:60px;
+  cursor:pointer;
+  margin:20px;
+  transition:0.3s;
+}
+.lixi:hover{
+  transform:scale(1.2);
+}
+
+.lixi-container{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:20px;
+}
+
+.lixi{
+  width:120px;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.lixi:hover{
+  transform:scale(1.1) rotate(5deg);
+}
+
+
+input{
+  padding:10px;
+  border-radius:8px;
+  border:none;
+  margin-top:10px;
+}
+
+</style>
+</head>
+
+<body>
+
+<canvas id="fireworks"></canvas>
+
+<!-- Trang 1 -->
+<section class="active" id="page1">
+  <h1>
+     Chúc Mừng Năm Mới 2026
+     </h1>
+  <p>Năm mới rực rỡ như pháo hoa ✨</p>
+  <button onclick="nextPage()">Bắt đầu hành trình</button>
+</section>
+
+<!-- Trang 2 -->
+<section id="page2">
+  <h1>🌸 Xuân An Khang 🌸</h1>
+  <p>Hoa nở mang theo tài lộc và niềm vui</p>
+  <button onclick="nextPage()">Tiếp tục</button>
+</section>
+
+<!-- Trang 3 -->
+<section id="page3">
+  <h1>🐎 Bứt phá mạnh mẽ 🐎</h1>
+  <p>Chạy về phía thành công và ước mơ</p>
+  <div class="horse">🐎</div>
+  <button onclick="nextPage()">Tiếp tục</button>
+</section>
+
+<!-- Trang 4 -->
+<section id="page4">
+  <h1>🧧 Mở Lì Xì May Mắn 🧧</h1>
+
+  <div class="lixi-container">
+    <img src="assets/images/lixi1.jpg" class="lixi" onclick="randomWish()">
+    <img src="assets/images/lixi1.jpg" class="lixi" onclick="randomWish()">
+    <img src="assets/images/lixi1.jpg" class="lixi" onclick="randomWish()">
+    <img src="assets/images/lixi1.jpg" class="lixi" onclick="randomWish()">
+    <img src="assets/images/lixi1.jpg" class="lixi" onclick="randomWish()">
+    <img src="assets/images/lixi1.jpg" class="lixi" onclick="randomWish()">
+  </div>
+
+  <p id="wishText"></p>
+  <button onclick="nextPage()">Tiếp tục</button>
+</section>
+
+<!-- Trang 5 -->
+<section id="page5">
+  <h1>🌟 Lời Chúc Dành Riêng Cho Bạn 🌟</h1>
+  <input type="text" id="nameInput" placeholder="Nhập tên của bạn đi nào">
+  <button onclick="generateWish()">Nhận lời chúc</button>
+  <p id="finalWish"></p>
+</section>
+
+<script>
+// Chuyển trang
+let current = 1;
+function nextPage(){
+  document.getElementById("page"+current).classList.remove("active");
+  current++;
+  document.getElementById("page"+current).classList.add("active");
+}
+
+// Hoa rơi
+function createFlower(){
+  const flower=document.createElement("div");
+  flower.classList.add("flower");
+  flower.innerHTML="🌸";
+  flower.style.left=Math.random()*100+"vw";
+  flower.style.animationDuration=3+Math.random()*5+"s";
+  document.body.appendChild(flower);
+  setTimeout(()=>flower.remove(),8000);
+}
+setInterval(createFlower,500);
+
+// Lì xì random
+const wishes=[
+"Vạn sự như ý",
+"Tiền vào như nước",
+"Sức khỏe dồi dào",
+"Thi đạt điểm A",
+"Tình yêu viên mãn",
+"Nhanh ăn chống lớn",
+"Ăn được nhiều bánh chưng"
+];
+function randomWish(){
+  const random=wishes[Math.floor(Math.random()*wishes.length)];
+  document.getElementById("wishText").innerText=random;
+}
+
+// Cá nhân hóa
+function generateWish(){
+  const name=document.getElementById("nameInput").value;
+  document.getElementById("finalWish").innerText=
+  "Chúc "+name+" năm 2026 thành công rực rỡ và hạnh phúc trọn vẹn ✨";
+}
+
+// Pháo hoa canvas
+const canvas=document.getElementById("fireworks");
+const ctx=canvas.getContext("2d");
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+let particles=[];
+
+function createFirework(){
+  let x=Math.random()*canvas.width;
+  let y=Math.random()*canvas.height/2;
+  for(let i=0;i<50;i++){
+    particles.push({
+      x:x,
+      y:y,
+      angle:Math.random()*2*Math.PI,
+      speed:Math.random()*5+2,
+      life:100
+    });
+  }
+}
+
+function animate(){
+  ctx.fillStyle="rgba(0,0,0,0.2)";
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+  particles.forEach((p,index)=>{
+    p.x+=Math.cos(p.angle)*p.speed;
+    p.y+=Math.sin(p.angle)*p.speed;
+    p.life--;
+    ctx.fillStyle="hsl("+Math.random()*360+",100%,50%)";
+    ctx.fillRect(p.x,p.y,3,3);
+    if(p.life<=0){
+      particles.splice(index,1);
+    }
+  });
+  requestAnimationFrame(animate);
+}
+
+setInterval(createFirework,1500);
+animate();
+</script>
+
+</body>
+</html>
