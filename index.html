@@ -4,7 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>New Year Journey 2026</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;700&display=swap" rel="stylesheet">
+
 <style>
 *{
   margin:0;
@@ -14,14 +16,16 @@
 }
 
 body{
-  overflow:hidden;
   background:linear-gradient(to top,#1a1a2e,#16213e);
   color:white;
+  min-height:100vh;
+  overflow-x:hidden;
 }
 
+/* Section */
 section{
-  width:100vw;
-  height:100vh;
+  width:100%;
+  min-height:100vh;
   display:none;
   justify-content:center;
   align-items:center;
@@ -34,9 +38,21 @@ section{
   display:flex;
 }
 
+/* Responsive text */
+h1{
+  font-size:clamp(22px,5vw,36px);
+  margin-bottom:15px;
+}
+
+p{
+  font-size:clamp(14px,4vw,18px);
+  margin-top:10px;
+}
+
+/* Button */
 button{
   margin-top:20px;
-  padding:10px 20px;
+  padding:12px 22px;
   border:none;
   background:#f4a261;
   color:white;
@@ -44,13 +60,15 @@ button{
   cursor:pointer;
   border-radius:8px;
   transition:0.3s;
+  font-size:16px;
 }
 button:hover{
   background:#e76f51;
 }
 
+/* Canvas */
 canvas{
-  position:absolute;
+  position:fixed;
   top:0;
   left:0;
   z-index:-1;
@@ -60,7 +78,7 @@ canvas{
 .flower{
   position:absolute;
   top:-20px;
-  font-size:20px;
+  font-size:18px;
   animation:fall linear infinite;
 }
 @keyframes fall{
@@ -69,39 +87,30 @@ canvas{
   }
 }
 
-/* Ngựa chạy */
+/* Ngựa */
 .horse{
   position:absolute;
-  bottom:100px;
-  left:-200px;
-  font-size:80px;
+  bottom:60px;
+  left:-150px;
+  font-size:clamp(40px,12vw,80px);
   animation:run 8s linear infinite;
 }
 @keyframes run{
-  from{ left:-200px; }
+  from{ left:-150px; }
   to{ left:100%; }
 }
 
 /* Lì xì */
-.lixi{
-  font-size:60px;
-  cursor:pointer;
-  margin:20px;
-  transition:0.3s;
-}
-.lixi:hover{
-  transform:scale(1.2);
-}
-
 .lixi-container{
   display:flex;
   flex-wrap:wrap;
   justify-content:center;
-  gap:20px;
+  gap:15px;
+  margin-top:20px;
 }
 
 .lixi{
-  width:120px;
+  width:clamp(80px,25vw,120px);
   cursor:pointer;
   transition:0.3s;
 }
@@ -110,14 +119,16 @@ canvas{
   transform:scale(1.1) rotate(5deg);
 }
 
-
+/* Input */
 input{
-  padding:10px;
+  padding:12px;
   border-radius:8px;
   border:none;
   margin-top:10px;
+  width:80%;
+  max-width:300px;
+  font-size:16px;
 }
-
 </style>
 </head>
 
@@ -127,9 +138,7 @@ input{
 
 <!-- Trang 1 -->
 <section class="active" id="page1">
-  <h1>
-     Chúc Mừng Năm Mới 2026
-     </h1>
+  <h1>🎆 Chúc Mừng Năm Mới 2026 🎆</h1>
   <p>Năm mới rực rỡ như pháo hoa ✨</p>
   <button onclick="nextPage()">Bắt đầu hành trình</button>
 </section>
@@ -175,12 +184,15 @@ input{
 </section>
 
 <script>
+
 // Chuyển trang
 let current = 1;
 function nextPage(){
   document.getElementById("page"+current).classList.remove("active");
   current++;
-  document.getElementById("page"+current).classList.add("active");
+  if(document.getElementById("page"+current)){
+    document.getElementById("page"+current).classList.add("active");
+  }
 }
 
 // Hoa rơi
@@ -202,9 +214,10 @@ const wishes=[
 "Sức khỏe dồi dào",
 "Thi đạt điểm A",
 "Tình yêu viên mãn",
-"Nhanh ăn chống lớn",
+"Nhanh ăn chóng lớn",
 "Ăn được nhiều bánh chưng"
 ];
+
 function randomWish(){
   const random=wishes[Math.floor(Math.random()*wishes.length)];
   document.getElementById("wishText").innerText=random;
@@ -213,15 +226,24 @@ function randomWish(){
 // Cá nhân hóa
 function generateWish(){
   const name=document.getElementById("nameInput").value;
+  if(name.trim()===""){
+    alert("Nhập tên trước đã nè 😆");
+    return;
+  }
   document.getElementById("finalWish").innerText=
   "Chúc "+name+" năm 2026 thành công rực rỡ và hạnh phúc trọn vẹn ✨";
 }
 
-// Pháo hoa canvas
+// Pháo hoa
 const canvas=document.getElementById("fireworks");
 const ctx=canvas.getContext("2d");
-canvas.width=window.innerWidth;
-canvas.height=window.innerHeight;
+
+function resizeCanvas(){
+  canvas.width=window.innerWidth;
+  canvas.height=window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener("resize",resizeCanvas);
 
 let particles=[];
 
@@ -242,21 +264,26 @@ function createFirework(){
 function animate(){
   ctx.fillStyle="rgba(0,0,0,0.2)";
   ctx.fillRect(0,0,canvas.width,canvas.height);
+
   particles.forEach((p,index)=>{
     p.x+=Math.cos(p.angle)*p.speed;
     p.y+=Math.sin(p.angle)*p.speed;
     p.life--;
+
     ctx.fillStyle="hsl("+Math.random()*360+",100%,50%)";
     ctx.fillRect(p.x,p.y,3,3);
+
     if(p.life<=0){
       particles.splice(index,1);
     }
   });
+
   requestAnimationFrame(animate);
 }
 
 setInterval(createFirework,1500);
 animate();
+
 </script>
 
 </body>
